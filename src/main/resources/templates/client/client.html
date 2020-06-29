@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Formation Spring Boot : Services Web</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="@{/welcome}">home <span class="sr-only">(current)</span></a></li>
+                    <li><a th:href="@{/client}">Client</a></li>
+                    <li><a th:href="@{/admin/emp/list}">article</a></li>
+                    <li><a th:href="@{/superadmin}">Utilisateur</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+        <form th:action="@{/logout}" method="get">
+            <button class="btn btn-md btn-danger btn-block" name="registration" type="Submit">Logout
+            </button>
+        </form>
+        <div class="panel-group" style="margin-top:40px">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span th:utext="${userName}"></span>
+                </div>
+                <div class="panel-body">
+                    <img th:src="@{/images/client.jpg}" class="img-responsive center-block" width="400" height="400" alt="Data" />
+                </div>
+                <p class="admin-message-text text-center" th:utext="${clientMessage}"></p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Formation Spring Boot : Services Web</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/5605be7499.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="@{/welcome}">home <span class="sr-only">(current)</span></a></li>
+                    <li><a th:href="@{/client}">Client</a></li>
+                    <li><a th:href="@{/admin/emp/list}">article</a></li>
+                    <li><a th:href="@{/superadmin}">Utilisateur</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+        <form th:action="@{/logout}" method="get">
+            <button class="btn btn-md btn-danger" title="Log Out" name="registration" type="Submit"><i class="fas fa-sign-out-alt"></i></button>
+        </form>
+        <div class="panel-group" style="margin-top: 40px">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <span th:utext="${userName}"></span>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        <form th:action="@{/admin/emp/form}" method="get">
+                            <button type="submite" class="btn btn-success">Ajouter</button>
+                        </form>
+                    </p>
+                    <div th:switch="${list}">
+                        <h3 th:case="null">Aucun employé !</h3>
+                        <div th:case="*" class="container">
+                            <h3>Liste des employés</h3>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Salary</th>
+                                        <th>Fonction</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="empVo : ${list}">
+                                        <td th:text="${empVo.name}"></td>
+                                        <td th:text="${empVo.salary}"></td>
+                                        <td th:text="${empVo.function}"></td>
+                                        <td><a th:href="@{/admin/emp/edit/{id}(id=${empVo.id})}"><i
+                                                    class="far fa-edit"></i> </a></td>
+                                        <td><a onclick="return confirm('voulez-vous vraiment supprimer')" th:href="@{/admin/emp/delete/{id}(id=${empVo.id})}"><i
+                                                    class="fa fa-trash" aria-hidden="true"></i></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <p class="admin-message-text text-center" th:utext="${adminMessage}"></p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

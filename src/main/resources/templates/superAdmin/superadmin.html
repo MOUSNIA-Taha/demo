@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/5605be7499.js" crossorigin="anonymous"></script>
+    <script type="text/javascript"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="@{/welcome}">home <span class="sr-only">(current)</span></a></li>
+                    <li><a th:href="@{/client}">Client</a></li>
+                    <li><a th:href="@{/admin/emp/list}">article</a></li>
+                    <li><a th:href="@{/superadmin}">Utilisateur</a></li>
+                    <li style="color: white;margin-left: 955px;">
+                        <a th:href="@{/logout}" class="btn btn-md btn-danger" title="Log Out" name="registration" type="Submit"><i class="fas fa-sign-out-alt"></i></a></button>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <div class="container">
+        <div class="panel-group" style="margin-top: 40px">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3>Liste des utilisateurs</h3>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        <form th:action="@{/superadmin/new}" method="get">
+                            <button type="submite" class="btn btn-success">Ajouter</button>
+                        </form>
+                    </p>
+                    <div th:switch="${users}">
+                        <h3 th:case="null">Aucun utilisateur !</h3>
+                        <div th:case="*" class="container">
+                            <table class="table table-condensed" style="border-collapse:collapse;width: 95%;">
+                                <thead>
+                                    <tr>
+                                        <th>&nbsp;</th>
+                                        <th>nom</th>
+                                    </tr>
+                                </thead>
+                                <tbody th:each="user : ${users}">
+                                    <tr>
+                                        <td><button data-toggle="collapse" th:data-target="${'#'+user.id}" class="btn btn-default btn-xs accordion-toggle"><span class="glyphicon
+                                                    glyphicon-eye-open"></span></button></td>
+                                        <td th:text="${user.username}"></td>
+                                        <td><a th:href="@{/superadmin/edit/{id}(id=${user.id})}"><i
+                                                    class="far fa-edit"></i> </a></td>
+                                        <td><a onclick="return confirm('voulez-vous vraiment supprimer')" th:href="@{/superadmin/delete/{id}(id=${user.id})}"><i
+                                                    class="fa fa-trash" aria-hidden="true"></i></a></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="12" class="hiddenRow">
+                                            <div class="accordian-body collapse" th:id="${user.id}">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Roles</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr th:each="r : ${user.roles}">
+                                                            <td th:text="${r.role}"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <p class="admin-message-" text text-center th:utext="${adminMessage} "></p>
+            </div>
+            <div align="center" th:if="${userVo.id==-1}">
+                <div class="container-sm">
+                    <form th:action="@{/superadmin/save}" method="POST" class="form-signin" th:object="${userVo}">
+
+                        <div>
+                            <h3 class="form-signin-heading" th:text="Nouveau"></h3>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" th:field="*{id}" id="id" name="name" th:placeholder="id" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="username">nom d'utilisateur</label>
+                            <input th:field="*{username}" type="text" id="username" name="name" th:placeholder="Username" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="password">mot de passe</label>
+                            <input th:field="*{password}" type="password" id="password" name="name" th:placeholder="password" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="dropOperator">Liste des roles</label>
+                            <select multiple="multiple" class="form-control" th:field="*{roles}" id="multiple-roles">
+                                <option th:each="role : ${rolelist}" th:value="${role.role}" th:text="${role.role}">
+                                </option>
+                            </select>
+                        </div>
+                        <div align="center" th:if="${param.error}">
+                            <p style="font-size: 20; color: #FF1C19;">error</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit" th:text="Ajouter"></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div align="center" th:if="${userVo.id>0}">
+                <div class="container-sm">
+                    <form th:action="@{/superadmin/update}" method="POST" class="form-signin" th:object="${userVo}">
+                        <div>
+                            <h3 class="form-signin-heading" th:text="Modifier"></h3>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" th:field="*{id}" id="id" name="name" th:placeholder="id" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="username">nom d'utilisateur</label>
+                            <input th:field="*{username}" type="text" id="username" name="name" th:placeholder="Username" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <input id="checkPass" type="checkbox" onclick="show(this)">
+                            <label for="checkPass">Initialiser le mot de passe</label>
+                            <input style="display: none;" th:field="*{password}" type="password" id="password" name="name" th:placeholder="password" class="form-control pass-input" />
+                        </div>
+                        <div class="form-group">
+                            <label for="dropOperator">Liste des roles</label>
+                            <select multiple="multiple" class="form-control" id="multiple-roles" name="roles">
+                                <option th:each="role : ${rolelist}" th:value="${role.role}"
+                                    th:selected="${userVo.roles.contains(role)}" th:text="${role.role}">
+                                </option>
+                            </select>
+                        </div>
+                        <div align="center" th:if="${param.error}">
+                            <p style="font-size: 20; color: #FF1C19;">error</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit" th:text="Sauvgarder"></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var val = $('.pass-input').val();
+
+    function show(obj) {
+        var $input = $(obj);
+        if ($input.prop('checked')) {
+            $('.pass-input').show();
+            $('.pass-input').attr('value', '');
+        } else {
+            $('.pass-input').hide();
+            $('.pass-input').attr('value', val);
+        }
+    }
+</script>
+
+</html>
