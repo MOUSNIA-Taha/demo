@@ -31,7 +31,7 @@ public class LoginCRUDApplication implements CommandLineRunner {
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-		return bCryptPasswordEncoder;
+		return bCryptPasswordEncoder; 
 	} 
 
 
